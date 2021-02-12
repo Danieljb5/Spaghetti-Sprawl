@@ -27,9 +27,16 @@ public class MenuScene extends Scene {
 
     @Override
     public void update(float dt) {
+
         for(GameObject go : this.gameObjects) {
             go.update(dt);
         }
+
+        /*
+        int x = (int)MouseListener.getX();
+        int y = (int)MouseListener.getY();
+        */
+
 
         this.renderer.render();
     }
