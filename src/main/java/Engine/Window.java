@@ -1,5 +1,6 @@
 package Engine;
 
+import Utilities.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -16,6 +17,7 @@ public class Window {
     public float r, g, b, a;
 
     private static Window window = null;
+    private static Scene currentScene;
 
     private Window()
     {
@@ -28,6 +30,24 @@ public class Window {
         a = 1;
     }
 
+    public static void changeScene(int newScene) {
+        switch (newScene) {
+            case 0:
+                currentScene = new MenuScene();
+                currentScene.init();
+                currentScene.start();
+                break;
+            case 1:
+                currentScene = new GameScene();
+                currentScene.init();
+                currentScene.start();
+                break;
+            default:
+                assert false : "[Engine.Window] Error: Unknown scene '" + newScene +"'";
+                break;
+        }
+    }
+
     public static Window get()
     {
         if(window == null) {
@@ -35,6 +55,10 @@ public class Window {
         }
 
         return window;
+    }
+
+    public static Scene getScene() {
+        return get().currentScene;
     }
 
     public void run() {
@@ -77,9 +101,13 @@ public class Window {
         glfwSwapInterval(1);
         glfwShowWindow(glfwWindow);
         GL.createCapabilities();
+        Window.changeScene(0);
     }
 
     public void loop() {
+        float beginTime = Time.getTime();
+        float endTime = Time.getTime();
+        float dt = -1.0f;
 
         while (!glfwWindowShouldClose(glfwWindow)) {
             glfwPollEvents();
@@ -87,8 +115,15 @@ public class Window {
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            if(dt >= 0) {
+                currentScene.update(dt);
+            }
 
             glfwSwapBuffers(glfwWindow);
+
+            endTime = Time.getTime();
+            dt = endTime - beginTime;
+            beginTime = endTime;
         }
     }
 }
