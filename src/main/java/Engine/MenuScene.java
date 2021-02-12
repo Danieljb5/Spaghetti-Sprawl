@@ -32,12 +32,6 @@ public class MenuScene extends Scene {
             go.update(dt);
         }
 
-        /*
-        int x = (int)MouseListener.getX();
-        int y = (int)MouseListener.getY();
-        */
-
-
         this.renderer.render();
     }
 }
