@@ -63,15 +63,12 @@ public class Camera {
 
     public Vector2f screenToWorld(Vector2f screenPos) {
         float currentX = screenPos.x;
-        Vector4f tmp = new Vector4f(currentX, 0, 0, 1);
+        float currentY = screenPos.y;
+        Vector4f tmp = new Vector4f(currentX, currentY, 0, 1);
         tmp.mul(Window.getScene().camera().getProjectionMatrix()).mul(Window.getScene().camera().getViewMatrix());
         currentX = tmp.x;
-        currentX = ((currentX + 1) * 2) * Window.get().width;
-
-        float currentY = screenPos.y;
-        tmp = new Vector4f(0, currentY, 0, 1);
-        tmp.mul(Window.getScene().camera().getProjectionMatrix()).mul(Window.getScene().camera().getViewMatrix());
         currentY = tmp.y;
+        currentX = ((currentX + 1) * 2) * Window.get().width;
         currentY = ((currentY + 1) * 2) * Window.get().height;
 
         return new Vector2f(currentX, currentY);

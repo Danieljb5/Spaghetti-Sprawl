@@ -131,4 +131,8 @@ public class Window {
             beginTime = endTime;
         }
     }
+
+    public void quit() {
+        glfwSetWindowShouldClose(glfwWindow, true);
+    }
 }
