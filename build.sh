@@ -1,5 +1,6 @@
 #!/bin/sh
 
+rm Spaghetti-Sprawl.zip
 mkdir jar
 cp build/artifacts/Spaghetti-Sprawl.jar jar
 cp assets jar -r
