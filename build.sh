@@ -8,3 +8,7 @@ cd jar
 cat buildRunnable.sh Spaghetti-Sprawl.jar > Spaghetti-Sprawl
 rm buildRunnable.sh
 chmod +x Spaghetti-Sprawl
+zip -r Spaghetti-Sprawl.zip *
+cd ..
+cp jar/Spaghetti-Sprawl.zip .
+rm jar -r
