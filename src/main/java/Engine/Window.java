@@ -18,6 +18,7 @@ public class Window {
 
     private static Window window = null;
     private static Scene currentScene;
+    private int[] aWidth = new int[1], aHeight = new int[1];
 
     private Window()
     {
@@ -118,6 +119,10 @@ public class Window {
             if(dt >= 0) {
                 currentScene.update(dt);
             }
+
+            glfwGetWindowSize(glfwWindow, aWidth, aHeight);
+            width = aWidth[0];
+            height = aHeight[0];
 
             glfwSwapBuffers(glfwWindow);
 
