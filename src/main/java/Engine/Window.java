@@ -1,9 +1,12 @@
 package Engine;
 
+import Fonts.SFont;
 import Utilities.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
+
+import java.io.File;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -104,6 +107,10 @@ public class Window {
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         Window.changeScene(0);
+        File file = new File("assets/fonts/Roboto-Bold.png");
+        if(!file.exists()) {
+            SFont font = new SFont("assets/fonts/Roboto-Bold.ttf", 32);
+        }
     }
 
     public void loop() {
@@ -121,9 +128,11 @@ public class Window {
                 currentScene.update(dt);
             }
 
-            glfwGetWindowSize(glfwWindow, aWidth, aHeight);
-            width = aWidth[0];
-            height = aHeight[0];
+            if(width != aWidth[0] || height != aHeight[0]) {
+                glfwGetWindowSize(glfwWindow, aWidth, aHeight);
+                width = aWidth[0];
+                height = aHeight[0];
+            }
 
             glfwSwapBuffers(glfwWindow);
 
