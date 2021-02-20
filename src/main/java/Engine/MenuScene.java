@@ -23,18 +23,22 @@ public class MenuScene extends Scene {
     public void init() {
         this.camera = new Camera(new Vector2f());
 
-        GameObject obj = new GameObject("Object", new Transform(new Vector2f(0, 0), new Vector2f(128, 72)), 1);
+        GameObject obj = new GameObject("Object", new Transform(new Vector2f(0, 0), new Vector2f(128, 72)), 10);
         obj.addComponent(new SpriteRenderer(new Sprite(AssetPool.getTexture("assets/sprites/menu/menu.png"))));
         this.addGameObjectToScene(obj);
-        GameObject obj2 = new GameObject("Object", 1);
+        GameObject obj2 = new GameObject("Object", 10);
         obj2.addComponent(new SpriteRenderer(new Sprite(AssetPool.getTexture("assets/sprites/menu/quitButton.png"))));
         obj2.addComponent(new Button(MenuScene::quitButtonListener));
         this.addGameObjectToScene(obj2);
+        GameObject obj3 = new GameObject("Object", 10);
+        obj3.addComponent(new SpriteRenderer(new Sprite(AssetPool.getTexture("assets/sprites/menu/startButton.png"))));
+        obj3.addComponent(new Button(MenuScene::startButtonListener));
+        this.addGameObjectToScene(obj3);
 
         loadResources();
 
         OpenSimplexNoise noise = new OpenSimplexNoise();
-        seed = (float)Math.random() * 100f;
+        seed = (float)(Math.random() * 2 - 1) * 10000f;
         gos = new GameObject[width * height];
         values = new Float[width * height];
         for(int x = 0; x < width; x++) {
@@ -66,11 +70,16 @@ public class MenuScene extends Scene {
         this.gameObjects.get(0).transform.scale = this.camera.screenToWorld(new Vector2f(214, 105));
         this.gameObjects.get(1).transform.position = this.camera.screenToWorld(new Vector2f(5, 10));
         this.gameObjects.get(1).transform.scale = this.camera.screenToWorld(new Vector2f(25, 12));
+        this.gameObjects.get(2).transform.position = this.camera.screenToWorld(new Vector2f(5, 50));
+        this.gameObjects.get(2).transform.scale = this.camera.screenToWorld(new Vector2f(25, 12));
 
         this.renderer.render();
     }
 
     static void quitButtonListener() {
         Window.get().quit();
+    }
+    static void startButtonListener() {
+        Window.changeScene(1);
     }
 }
