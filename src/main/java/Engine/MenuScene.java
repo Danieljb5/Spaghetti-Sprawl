@@ -12,6 +12,7 @@ public class MenuScene extends Scene {
     Float[] values;
     int width = 150, height = 75;
     float res = 50f;
+    float seed;
 
     public MenuScene() {
 
@@ -28,11 +29,12 @@ public class MenuScene extends Scene {
         loadResources();
 
         OpenSimplexNoise noise = new OpenSimplexNoise();
+        seed = (float)Math.random() * 100f;
         gos = new GameObject[width * height];
         values = new Float[width * height];
         for(int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                double value = noise.eval((double)(x * (1f / res)), (double)(y * (1f / res)));
+                double value = noise.eval((double)(x * (1f / res)), (double)(y * (1f / res)), seed);
                 System.out.println(value);
                 values[x + y * width] = (float)value;
                 gos[x + y * width] = new GameObject("Tile");
