@@ -2,7 +2,9 @@ package Engine;
 
 import org.joml.Vector2f;
 
-public class Transform {
+import java.io.Serializable;
+
+public class Transform implements Serializable {
 
     public Vector2f position;
     public Vector2f scale;

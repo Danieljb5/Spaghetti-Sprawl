@@ -1,6 +1,8 @@
 package Engine;
 
-public abstract class Component {
+import java.io.Serializable;
+
+public abstract class Component implements Serializable {
     public GameObject gameObject = null;
 
     public void start() {

@@ -3,16 +3,13 @@ package Engine;
 public class Save {
     private float seed;
     private GameObject[] gos;
+    private GameScene instance;
 
-    public float getSeed() {
-        return this.seed;
-    }
-    public GameObject[] getGOs() {
-        return this.gos;
+    public GameScene getInstance() {
+        return this.instance;
     }
 
-    public Save(float seed, GameObject[] gos) {
-        this.seed = seed;
-        this.gos = gos;
+    public Save(GameScene instance) {
+        this.instance = instance;
     }
 }

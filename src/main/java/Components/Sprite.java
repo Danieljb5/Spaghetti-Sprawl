@@ -3,7 +3,9 @@ package Components;
 import Renderer.Texture;
 import org.joml.Vector2f;
 
-public class Sprite {
+import java.io.Serializable;
+
+public class Sprite implements Serializable {
 
     private Texture texture;
     private Vector2f[] texCoords;

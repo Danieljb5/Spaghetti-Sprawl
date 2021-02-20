@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class SaveSystem {
-    public static void save(String saveGame, float seed, GameObject[] gos) {
+    public static void saveAndExit(String saveGame, GameScene instance) {
         File savesDir = new File("saves");
         if(!savesDir.exists()) {
             savesDir.mkdir();
@@ -14,23 +14,12 @@ public class SaveSystem {
         if(!saveDir.exists()) {
             saveDir.mkdir();
         }
-        try {
-            FileWriter writer = new FileWriter("saves/" + saveGame + "/seed.dat");
-            writer.write("SEED:" + seed);
-            writer.write("\n");
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        try (FileOutputStream fos = new FileOutputStream("saves/" + saveGame + "/sceneInstance.dat");
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(instance);
         }
-
-        for(int i = 0; i < gos.length; i++) {
-            try (FileOutputStream fos = new FileOutputStream("saves/" + saveGame + "/" + gos[i].id() + ".dat");
-                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(gos[i]);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -40,22 +29,35 @@ public class SaveSystem {
             saveDir.mkdir();
         }
 
-        File file = new File("saves/" + saveGame);
-        if(file.exists()) {
-            try {
-                String source = new String(Files.readAllBytes(Paths.get("saves/" + saveGame + "/seeds.dat")));
-                String[] splitString = source.split("(SEED:)( )+([a-zA-Z]+)");
-                int index = source.indexOf("SEED:") + 5;
-                int eol = source.indexOf("\n", index);
-                String seedSrc = source.substring(index, eol).trim();
-                float seed = Float.parseFloat(seedSrc);
+        File file = new File("saves/" + saveGame + "/");
+        if(!file.exists()) {
+            return null;
+        }
+        try {
+            byte[] sceneInstanceBytes = Files.readAllBytes(Paths.get("saves/" + saveGame + "/sceneInstance.dat"));
+            ByteArrayInputStream in = new ByteArrayInputStream(sceneInstanceBytes);
+            ObjectInputStream is = new ObjectInputStream(in);
+            GameScene instance = (GameScene)is.readObject();
 
-                System.out.println(seed);
-                Save save = new Save(seed, new GameObject[0]);
-                return save;
-            } catch (IOException e) {
-                e.printStackTrace();
+            File saveDirectory = new File("saves/" + saveGame);
+            String[] saveData = saveDir.list(new FilenameFilter() {
+                @Override
+                public boolean accept(File current, String name) {
+                    return new File(current, name).isFile();
+                }
+            });
+            GameObject[] gos = new GameObject[saveData.length];
+            for(int i = 0; i < saveData.length; i++) {
+                byte[] goBytes = Files.readAllBytes(Paths.get("saves/" + saveGame + "/" + saveData[i]));
+                in = new ByteArrayInputStream(goBytes);
+                is = new ObjectInputStream(in);
+                gos[i] = (GameObject)is.readObject();
             }
+
+            Save save = new Save(instance);
+            return save;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return null;
     }

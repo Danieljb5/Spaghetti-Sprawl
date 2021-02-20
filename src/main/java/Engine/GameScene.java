@@ -4,8 +4,14 @@ import Components.Tile;
 import Utilities.AssetPool;
 import org.joml.Vector2f;
 
-public class GameScene extends Scene {
+import java.io.Serializable;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+
+public class GameScene extends Scene implements Serializable {
+
+    private String saveGame = "Test";
+    static GameScene instance;
     GameObject[] gos;
     Float[] values;
     int width = 150, height = 75;
@@ -13,7 +19,7 @@ public class GameScene extends Scene {
     float seed = 0;
 
     public GameScene() {
-
+        instance = this;
     }
 
     @Override
@@ -21,9 +27,9 @@ public class GameScene extends Scene {
         this.camera = new Camera(new Vector2f());
         loadResources();
 
-        Save save = SaveSystem.load("Test");
+        Save save = SaveSystem.load(saveGame);
         if(save != null) {
-            seed = save.getSeed();
+            seed = save.getInstance().seed;
         } else {
             seed = (float) Math.random() * 100f;
         }
@@ -44,8 +50,6 @@ public class GameScene extends Scene {
                 this.addGameObjectToScene(go);
             }
         }
-
-        //SaveSystem.save("Test", seed);
     }
 
     private void loadResources() {
@@ -58,6 +62,18 @@ public class GameScene extends Scene {
             go.update(dt);
         }
 
+        if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) {
+            exit();
+        }
+
         this.renderer.render();
+    }
+
+    public void exit() {
+        for(int i = 0; i < gos.length; i++) {
+            this.gameObjects.remove(gos[i]);
+        }
+        SaveSystem.saveAndExit(saveGame, this);
+        Window.changeScene(0);
     }
 }

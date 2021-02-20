@@ -88,6 +88,7 @@ public class MenuScene extends Scene {
                 return new File(current, name).isDirectory();
             }
         });
+        Window.changeScene(1);
     }
 
     static void quitButtonListener() {

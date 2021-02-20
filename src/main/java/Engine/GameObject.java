@@ -1,9 +1,10 @@
 package Engine;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameObject {
+public class GameObject implements Serializable {
     private String name;
     private List<Component> components;
     public Transform transform;
