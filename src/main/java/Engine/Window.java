@@ -138,4 +138,11 @@ public class Window {
     public void quit() {
         glfwSetWindowShouldClose(glfwWindow, true);
     }
+
+    public static int getWidth() {
+        return get().width;
+    }
+    public static int getHeight() {
+        return get().height;
+    }
 }

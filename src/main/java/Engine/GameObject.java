@@ -16,6 +16,13 @@ public class GameObject {
         this.transform = new Transform();
     }
 
+    public GameObject(String name, int zIndex) {
+        this.name = name;
+        this.zIndex = zIndex;
+        this.components = new ArrayList<>();
+        this.transform = new Transform();
+    }
+
     public GameObject(String name, Transform transform) {
         this.name = name;
         this.zIndex = 0;

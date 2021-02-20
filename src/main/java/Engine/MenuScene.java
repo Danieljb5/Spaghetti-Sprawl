@@ -1,5 +1,6 @@
 package Engine;
 
+import Components.Button;
 import Components.Sprite;
 import Components.SpriteRenderer;
 import Components.Tile;
@@ -25,6 +26,10 @@ public class MenuScene extends Scene {
         GameObject obj = new GameObject("Object", new Transform(new Vector2f(0, 0), new Vector2f(128, 72)), 1);
         obj.addComponent(new SpriteRenderer(new Sprite(AssetPool.getTexture("assets/sprites/menu/menu.png"))));
         this.addGameObjectToScene(obj);
+        GameObject obj2 = new GameObject("Object", 1);
+        obj2.addComponent(new SpriteRenderer(new Sprite(AssetPool.getTexture("assets/sprites/menu/quitButton.png"))));
+        obj2.addComponent(new Button(MenuScene::quitButtonListener));
+        this.addGameObjectToScene(obj2);
 
         loadResources();
 
@@ -35,7 +40,6 @@ public class MenuScene extends Scene {
         for(int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
                 double value = noise.eval((double)(x * (1f / res)), (double)(y * (1f / res)), seed);
-                System.out.println(value);
                 values[x + y * width] = (float)value;
                 gos[x + y * width] = new GameObject("Tile");
                 GameObject go = gos[x + y * width];
@@ -60,7 +64,13 @@ public class MenuScene extends Scene {
         }
 
         this.gameObjects.get(0).transform.scale = this.camera.screenToWorld(new Vector2f(214, 105));
+        this.gameObjects.get(1).transform.position = this.camera.screenToWorld(new Vector2f(5, 10));
+        this.gameObjects.get(1).transform.scale = this.camera.screenToWorld(new Vector2f(25, 12));
 
         this.renderer.render();
+    }
+
+    static void quitButtonListener() {
+        Window.get().quit();
     }
 }
