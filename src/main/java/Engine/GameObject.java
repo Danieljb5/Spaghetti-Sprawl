@@ -8,12 +8,14 @@ public class GameObject {
     private List<Component> components;
     public Transform transform;
     private int zIndex;
+    private int id;
 
     public GameObject(String name) {
         this.name = name;
         this.zIndex = 0;
         this.components = new ArrayList<>();
         this.transform = new Transform();
+        addID();
     }
 
     public GameObject(String name, int zIndex) {
@@ -21,6 +23,7 @@ public class GameObject {
         this.zIndex = zIndex;
         this.components = new ArrayList<>();
         this.transform = new Transform();
+        addID();
     }
 
     public GameObject(String name, Transform transform) {
@@ -28,6 +31,7 @@ public class GameObject {
         this.zIndex = 0;
         this.components = new ArrayList<>();
         this.transform = transform;
+        addID();
     }
 
     public GameObject(String name, Transform transform, int zIndex) {
@@ -35,6 +39,11 @@ public class GameObject {
         this.zIndex = zIndex;
         this.components = new ArrayList<>();
         this.transform = transform;
+        addID();
+    }
+
+    private void addID() {
+        id = Window.getScene().gameObjects.size() + 1;
     }
 
     public <T extends Component> T getComponent(Class<T> componentClass) {
@@ -80,5 +89,8 @@ public class GameObject {
 
     public int zIndex() {
         return this.zIndex;
+    }
+    public int id() {
+        return this.id;
     }
 }

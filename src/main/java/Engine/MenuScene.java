@@ -7,8 +7,12 @@ import Components.Tile;
 import Utilities.AssetPool;
 import org.joml.Vector2f;
 
+import java.io.File;
+import java.io.FilenameFilter;
+
 public class MenuScene extends Scene {
 
+    static MenuScene instance;
     GameObject[] gos;
     Float[] values;
     int width = 150, height = 75;
@@ -16,7 +20,7 @@ public class MenuScene extends Scene {
     float seed;
 
     public MenuScene() {
-
+        instance = this;
     }
 
     @Override
@@ -28,11 +32,11 @@ public class MenuScene extends Scene {
         this.addGameObjectToScene(obj);
         GameObject obj2 = new GameObject("Object", 10);
         obj2.addComponent(new SpriteRenderer(new Sprite(AssetPool.getTexture("assets/sprites/menu/quitButton.png"))));
-        obj2.addComponent(new Button(MenuScene::quitButtonListener));
+        obj2.addComponent(new Button(MenuScene::quitButtonListener, Button.Mode.Down));
         this.addGameObjectToScene(obj2);
         GameObject obj3 = new GameObject("Object", 10);
         obj3.addComponent(new SpriteRenderer(new Sprite(AssetPool.getTexture("assets/sprites/menu/startButton.png"))));
-        obj3.addComponent(new Button(MenuScene::startButtonListener));
+        obj3.addComponent(new Button(MenuScene::startButtonListener, Button.Mode.Down));
         this.addGameObjectToScene(obj3);
 
         loadResources();
@@ -76,10 +80,20 @@ public class MenuScene extends Scene {
         this.renderer.render();
     }
 
+    private void showSaves() {
+        File saveDir = new File("saves");
+        String[] saves = saveDir.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isDirectory();
+            }
+        });
+    }
+
     static void quitButtonListener() {
         Window.get().quit();
     }
     static void startButtonListener() {
-        Window.changeScene(1);
+        MenuScene.instance.showSaves();
     }
 }

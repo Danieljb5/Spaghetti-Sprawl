@@ -10,7 +10,7 @@ public class GameScene extends Scene {
     Float[] values;
     int width = 150, height = 75;
     float res = 50f;
-    float seed;
+    float seed = 0;
 
     public GameScene() {
 
@@ -21,8 +21,14 @@ public class GameScene extends Scene {
         this.camera = new Camera(new Vector2f());
         loadResources();
 
+        Save save = SaveSystem.load("Test");
+        if(save != null) {
+            seed = save.getSeed();
+        } else {
+            seed = (float) Math.random() * 100f;
+        }
+
         OpenSimplexNoise noise = new OpenSimplexNoise();
-        seed = (float)Math.random() * 100f;
         gos = new GameObject[width * height];
         values = new Float[width * height];
         for(int x = 0; x < width; x++) {
@@ -38,6 +44,8 @@ public class GameScene extends Scene {
                 this.addGameObjectToScene(go);
             }
         }
+
+        //SaveSystem.save("Test", seed);
     }
 
     private void loadResources() {
