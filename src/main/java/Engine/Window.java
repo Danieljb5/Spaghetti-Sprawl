@@ -49,6 +49,12 @@ public class Window {
         }
     }
 
+    public static void setScene(Scene scene) {
+        currentScene = scene;
+        currentScene.init();
+        currentScene.start();
+    }
+
     public static Window get()
     {
         if(window == null) {

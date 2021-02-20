@@ -17,6 +17,7 @@ public class GameScene extends Scene implements Serializable {
     int width = 150, height = 75;
     float res = 50f;
     float seed = 0;
+    float autoSaveTimer = 0.0f;
 
     public GameScene() {
         instance = this;
@@ -29,7 +30,7 @@ public class GameScene extends Scene implements Serializable {
 
         Save save = SaveSystem.load(saveGame);
         if(save != null) {
-            seed = save.getInstance().seed;
+            set(instance);
         } else {
             seed = (float) Math.random() * 100f;
         }
@@ -66,6 +67,11 @@ public class GameScene extends Scene implements Serializable {
             exit();
         }
 
+        autoSaveTimer += dt;
+        if(autoSaveTimer >= 600f) {
+            save();
+        }
+
         this.renderer.render();
     }
 
@@ -73,7 +79,25 @@ public class GameScene extends Scene implements Serializable {
         for(int i = 0; i < gos.length; i++) {
             this.gameObjects.remove(gos[i]);
         }
-        SaveSystem.saveAndExit(saveGame, this);
+        SaveSystem.save(saveGame, this);
         Window.changeScene(0);
+    }
+
+    public void save() {
+        for(int i = 0; i < gos.length; i++) {
+            this.gameObjects.remove(gos[i]);
+        }
+        SaveSystem.save(saveGame, this);
+        for(int i = 0; i < gos.length; i++) {
+            this.addGameObjectToScene(gos[i]);
+        }
+    }
+
+    private void set(GameScene instance) {
+        this.instance = instance;
+        this.seed = instance.seed;
+        this.gameObjects = instance.gameObjects;
+        this.camera = instance.camera;
+
     }
 }

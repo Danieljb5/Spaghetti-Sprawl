@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class SaveSystem {
-    public static void saveAndExit(String saveGame, GameScene instance) {
+    public static void save(String saveGame, GameScene instance) {
         File savesDir = new File("saves");
         if(!savesDir.exists()) {
             savesDir.mkdir();
