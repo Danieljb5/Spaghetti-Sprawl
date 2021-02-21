@@ -5,7 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class SaveSystem {
-    public static void save(String saveGame, GameScene instance) {
+    public static void save(String saveGame, GameScene gs) {
+        GameScene instance = new GameScene();
+        Save tmpSave = new Save(gs);
+        instance.set(tmpSave);
         File savesDir = new File("saves");
         if(!savesDir.exists()) {
             savesDir.mkdir();
@@ -38,21 +41,6 @@ public class SaveSystem {
             ByteArrayInputStream in = new ByteArrayInputStream(sceneInstanceBytes);
             ObjectInputStream is = new ObjectInputStream(in);
             GameScene instance = (GameScene)is.readObject();
-
-            File saveDirectory = new File("saves/" + saveGame);
-            String[] saveData = saveDir.list(new FilenameFilter() {
-                @Override
-                public boolean accept(File current, String name) {
-                    return new File(current, name).isFile();
-                }
-            });
-            GameObject[] gos = new GameObject[saveData.length];
-            for(int i = 0; i < saveData.length; i++) {
-                byte[] goBytes = Files.readAllBytes(Paths.get("saves/" + saveGame + "/" + saveData[i]));
-                in = new ByteArrayInputStream(goBytes);
-                is = new ObjectInputStream(in);
-                gos[i] = (GameObject)is.readObject();
-            }
 
             Save save = new Save(instance);
             return save;

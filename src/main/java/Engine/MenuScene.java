@@ -4,11 +4,14 @@ import Components.Button;
 import Components.Sprite;
 import Components.SpriteRenderer;
 import Components.Tile;
+import Content.ContentInterpreter;
+import Content.ContentLoader;
 import Utilities.AssetPool;
 import org.joml.Vector2f;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.List;
 
 public class MenuScene extends Scene {
 
@@ -41,8 +44,8 @@ public class MenuScene extends Scene {
 
         loadResources();
 
+        this.seed = (((float)Math.random() * 20000f) - 10000f);
         OpenSimplexNoise noise = new OpenSimplexNoise();
-        seed = (float)(Math.random() * 2 - 1) * 10000f;
         gos = new GameObject[width * height];
         values = new Float[width * height];
         for(int x = 0; x < width; x++) {
@@ -58,6 +61,10 @@ public class MenuScene extends Scene {
                 this.addGameObjectToScene(go);
             }
         }
+
+        List<String[]> content = ContentLoader.loadAllContent();
+        ContentInterpreter interpreter = new ContentInterpreter();
+        interpreter.InterpretContent(content);
     }
 
     private void loadResources() {
@@ -72,10 +79,10 @@ public class MenuScene extends Scene {
         }
 
         this.gameObjects.get(0).transform.scale = this.camera.screenToWorld(new Vector2f(214, 105));
-        this.gameObjects.get(1).transform.position = this.camera.screenToWorld(new Vector2f(5, 10));
-        this.gameObjects.get(1).transform.scale = this.camera.screenToWorld(new Vector2f(25, 12));
-        this.gameObjects.get(2).transform.position = this.camera.screenToWorld(new Vector2f(5, 50));
-        this.gameObjects.get(2).transform.scale = this.camera.screenToWorld(new Vector2f(25, 12));
+        this.gameObjects.get(1).transform.position = this.camera.screenToWorld(new Vector2f(2, 10));
+        this.gameObjects.get(1).transform.scale = this.camera.screenToWorld(new Vector2f(29, 12));
+        this.gameObjects.get(2).transform.position = this.camera.screenToWorld(new Vector2f(2, 50));
+        this.gameObjects.get(2).transform.scale = this.camera.screenToWorld(new Vector2f(33, 12));
 
         this.renderer.render();
     }

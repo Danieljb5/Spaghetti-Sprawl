@@ -3,6 +3,8 @@ package Components;
 import Engine.Component;
 import Utilities.AssetPool;
 
+import java.util.Random;
+
 public class Tile extends Component {
 
     private float value;
@@ -36,7 +38,9 @@ public class Tile extends Component {
         if(this.tileType < 0 || this.tileType >= levels.length) {
             this.tileType = levels.length - 1;
         }
-        int variant = (int)(Math.random() * (variants[this.tileType]));
+        Random random = new Random((long)Math.abs(value * 100));
+        random.nextFloat();
+        int variant = (int)(random.nextFloat() * variants[this.tileType]);
         if(variant > variants[this.tileType] - 1){
             variant = variants[this.tileType] - 1;
         }
@@ -47,5 +51,13 @@ public class Tile extends Component {
         } else {
             this.gameObject.getComponent(SpriteRenderer.class).setSprite(sprite);
         }
+    }
+
+    public int getTileType() {
+        return this.tileType;
+    }
+
+    public int[] getVariants() {
+        return this.variants;
     }
 }
