@@ -107,6 +107,7 @@ public class GameScene extends Scene implements Serializable {
     @Override
     public void update(float dt) {
         unloadAcceptQueue();
+
         for(int i = 0; i < this.gameObjects.size(); i++) {
             this.gameObjects.get(i).update(dt);
         }
@@ -147,6 +148,9 @@ public class GameScene extends Scene implements Serializable {
         if(KeyListener.isKeyPressed(GLFW_KEY_A)) {
             playerPos.x -= moveSpeed * dt;
         }
+        if(KeyListener.isKeyPressed(GLFW_KEY_R)) {
+            playerPos = new Vector2f();
+        }
 
         this.camera().position = playerPos;
 
@@ -182,7 +186,7 @@ public class GameScene extends Scene implements Serializable {
         this.instance = instance;
         this.seed = instance.seed;
         this.gameObjects = instance.gameObjects;
-        this.playerPos = instance.playerPos;
+        this.playerPos = new Vector2f();
         this.autoSaveTimer = instance.autoSaveTimer;
     }
 }

@@ -12,12 +12,14 @@ public class TerrarinGenerator extends Thread implements Runnable, Serializable 
     boolean running = false, inLoop = false;
 
     public void kill() {
-        while (running) {
-            running = false;
-            currentThread().interrupt();
-            System.out.println("Attempting to stop terrain thread");
+        if(running) {
+            while (running) {
+                running = false;
+                currentThread().interrupt();
+                System.out.println("Attempting to stop terrain thread");
+            }
+            System.out.println("Terrain thread ready to stop");
         }
-        System.out.println("Terrain thread ready to stop");
     }
 
     public boolean isRunning() {
@@ -36,7 +38,7 @@ public class TerrarinGenerator extends Thread implements Runnable, Serializable 
             }
 
             try {
-                sleep(1);
+                sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

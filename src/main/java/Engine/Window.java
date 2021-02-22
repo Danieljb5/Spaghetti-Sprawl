@@ -74,6 +74,7 @@ public class Window {
         init();
         loop();
 
+        GameScene.instance.terrarinGenerator.kill();
         glfwFreeCallbacks(glfwWindow);
         glfwDestroyWindow(glfwWindow);
         glfwTerminate();
