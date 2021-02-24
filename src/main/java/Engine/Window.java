@@ -73,8 +73,9 @@ public class Window {
 
         init();
         loop();
-
-        GameScene.instance.terrarinGenerator.kill();
+        if(GameScene.isInitialised) {
+            GameScene.instance.terrarinGenerator.kill();
+        }
         glfwFreeCallbacks(glfwWindow);
         glfwDestroyWindow(glfwWindow);
         glfwTerminate();
@@ -92,9 +93,9 @@ public class Window {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
-        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+        //glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
-        glfwWindow = glfwCreateWindow(this.width, this.height, this.title, glfwGetPrimaryMonitor(), NULL);
+        glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
         if(glfwWindow == NULL) {
             throw new IllegalStateException("Failed to create GLFW window.");
         }
@@ -115,7 +116,7 @@ public class Window {
 
     public void loop() {
         float beginTime = Time.getTime();
-        float endTime = Time.getTime();
+        float endTime;
         float dt = -1.0f;
 
         while (!glfwWindowShouldClose(glfwWindow)) {
@@ -128,10 +129,20 @@ public class Window {
                 currentScene.update(dt);
             }
 
+            glfwGetWindowSize(glfwWindow, aWidth, aHeight);
+            if(aWidth[0] < 1320) {
+                glfwSetWindowSize(glfwWindow, 1320, aHeight[0]);
+            }
+            if(aHeight[0] < 880) {
+                glfwSetWindowSize(glfwWindow, aWidth[0], 880);
+            }
             if(width != aWidth[0] || height != aHeight[0]) {
-                glfwGetWindowSize(glfwWindow, aWidth, aHeight);
                 width = aWidth[0];
                 height = aHeight[0];
+                MenuScene.instance.setScreenSize();
+                if(GameScene.isInitialised) {
+                    GameScene.instance.setScreenSize();
+                }
             }
 
             glfwSwapBuffers(glfwWindow);

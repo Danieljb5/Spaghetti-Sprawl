@@ -27,9 +27,14 @@ public class GameScene extends Scene implements Serializable {
     Thread terrainThread;
     TerrarinGenerator terrarinGenerator;
     List<GameObject> acceptQueue = new ArrayList<>();
+    public static boolean isInitialised = false;
+    private boolean recalculateScreen;
+    public Vector2f screenSize;
+    private int width, height;
 
     public GameScene() {
         instance = this;
+        isInitialised = true;
     }
 
     @Override
@@ -52,10 +57,8 @@ public class GameScene extends Scene implements Serializable {
         AssetPool.getShader("assets/shaders/default.glsl");
     }
 
-    public static void acceptGeneratedTerrain(GameObject[] terrain) {
-        for(int i = 0; i < terrain.length; i++) {
-            instance.acceptQueue.add(terrain[i]);
-        }
+    public static void acceptGeneratedTerrain(GameObject chunk) {
+        instance.acceptQueue.add(chunk);
     }
 
     private Vector2f[] calculateOnScreenChunks(Vector2f playerPos) {
@@ -94,6 +97,7 @@ public class GameScene extends Scene implements Serializable {
                 if(!this.gameObjects.contains(instance.acceptQueue.get(0)));
                 {
                     addGameObjectToScene(instance.acceptQueue.get(0));
+                    //this.gameObjects.get(this.gameObjects.size() - 1).getComponent(Chunk.class).showChunk();
                 }
             }
             instance.acceptQueue.remove(0);
@@ -106,7 +110,20 @@ public class GameScene extends Scene implements Serializable {
 
     @Override
     public void update(float dt) {
+        if(Window.getScene() != this) {
+            isInitialised = false;
+        }
+
         unloadAcceptQueue();
+
+        if(this.recalculateScreen) {
+            screenSize = getScreenSize();
+            this.recalculateScreen = false;
+            if(width != (int)screenSize.x || height != (int)screenSize.y) {
+                width = (int) screenSize.x;
+                height = (int) screenSize.y;
+            }
+        }
 
         for(int i = 0; i < this.gameObjects.size(); i++) {
             this.gameObjects.get(i).update(dt);

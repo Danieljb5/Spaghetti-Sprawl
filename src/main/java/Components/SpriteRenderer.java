@@ -31,6 +31,9 @@ public class SpriteRenderer extends Component {
 
     @Override
     public void update(float dt) {
+        if(this.lastTransform == null) {
+            this.lastTransform = new Transform();
+        }
         if(!this.lastTransform.equals(this.gameObject.transform)) {
             this.gameObject.transform.copy(this.lastTransform);
             isDirty = true;

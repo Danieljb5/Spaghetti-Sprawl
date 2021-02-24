@@ -1,6 +1,6 @@
 package Engine;
 
-import Components.Tile;
+import Components.Chunk;
 import org.joml.Vector2f;
 
 import java.io.Serializable;
@@ -56,27 +56,26 @@ public class TerrarinGenerator extends Thread implements Runnable, Serializable 
     }
 
     public void generateTerrainChunk(GameScene instance, Vector2f chunkCoords) {
-        GameObject[] gos;
         int width = instance.chunkWidth;
         int height = instance.chunkHeight;
         Vector2f offset = new Vector2f(chunkCoords.x * width, chunkCoords.y * height);
-        Float[] values;
+        float[] values;
 
         OpenSimplexNoise noise = new OpenSimplexNoise();
-        gos = new GameObject[width * height];
-        values = new Float[width * height];
+        GameObject go;
+        values = new float[width * height];
         for(int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
                 double value = noise.eval((double)((x + (int) offset.x) * (1f / instance.res)), (double)((y + (int) offset.y) * (1f / instance.res)), instance.seed);
                 values[x + y * width] = (float)value;
-                gos[x + y * width] = new GameObject("Tile");
-                GameObject go = gos[x + y * width];
-                go.transform.position = new Vector2f((x + offset.x) * 10, (y + offset.y) * 10);
-                go.transform.scale = new Vector2f(10, 10);
-                go.addComponent(new Tile());
-                go.getComponent(Tile.class).setValue((float)value);
+
             }
         }
-        GameScene.acceptGeneratedTerrain(gos);
+        go = new GameObject("Tile");
+        go.transform.position = new Vector2f(offset.x * 10, offset.y * 10);
+        go.transform.scale = new Vector2f(320, 320);
+        go.addComponent(new Chunk());
+        go.getComponent(Chunk.class).setAllValues(values);
+        GameScene.acceptGeneratedTerrain(go);
     }
 }
