@@ -1,4 +1,4 @@
-# Spaghetti-Sprawl
+# 2D Ptototype Game
 
 ![alt text](https://github.com/Danieljb5/Spaghetti-Sprawl/blob/main/assets/sprites/logo.png)
 
